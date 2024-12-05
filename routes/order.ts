@@ -151,7 +151,7 @@ module.exports = function placeOrder () {
             })
           }
 
-          db.ordersCollection.insert({
+          db.ordersCollection.insert.toString()({
             promotionalAmount: discountAmount,
             paymentId: req.body.orderDetails ? req.body.orderDetails.paymentId : null,
             addressId: req.body.orderDetails ? req.body.orderDetails.addressId : null,
