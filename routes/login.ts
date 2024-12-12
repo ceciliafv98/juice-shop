@@ -33,12 +33,21 @@ module.exports = function login () {
 
   return (req: Request, res: Response, next: NextFunction) => {
     verifyPreLoginChallenges(req) // vuln-code-snippet hide-line
-    models.sequelize.query(`SELECT * FROM Users WHERE email = '${mail || ''}' AND password = '${security.hash(pass || '')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) // vuln-code-snippet vuln-line loginAdminChallenge loginBenderChallenge loginJimChallenge
-      .where('mail', req.query.mail)
-      .where('pass', req.query.pass)
+    const User = sequelize.define ("User",
+          { email:req.body.email},
+          { password: req.body.password},
+          {deleteAt: },
+    }};
+
+    User.findOne() //
+    .then((authenticatedUser) => { // vuln-code-snippet neutral-line loginAdminChallenge loginBenderChallenge loginJimChallenge
+  
+    //models.sequelize.query(`SELECT * FROM Users WHERE email = '${mail || ''}' AND password = '${security.hash(pass || '')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) // vuln-code-snippet vuln-line loginAdminChallenge loginBenderChallenge loginJimChallenge
+    //  .where('mail', req.query.mail)
+     // .where('pass', req.query.pass)
 
       
-      .then((authenticatedUser) => { // vuln-code-snippet neutral-line loginAdminChallenge loginBenderChallenge loginJimChallenge
+     
         const user = utils.queryResultToJson(authenticatedUser)
         if (user.data?.id && user.data.totpSecret !== '') {
           res.status(401).json({
